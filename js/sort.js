@@ -32,7 +32,7 @@
       if (anim && anim[1] === i) cls += ' swap-l';
       var pickable = manual && mode() === 'select';
       var crate = el('button', {
-        class: cls, type: 'button', style: 'height:' + (34 + b.w * 10) + 'px' + (pickable ? '' : ';cursor:default'),
+        class: cls, type: 'button', style: '--kg:' + b.w + (pickable ? '' : ';cursor:default'),
         'aria-label': I18n.t('s.box.aria', { w: b.w, i: i }),
         tabindex: pickable ? null : '-1',
         onclick: function () { pickBox(i); }

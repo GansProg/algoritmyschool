@@ -90,5 +90,14 @@
     });
   }
 
-  root.Common = { Store: Store, Grades: Grades, el: el, stamp: stamp, clearStamp: clearStamp, wait: wait, delayFor: delayFor, levelButtons: levelButtons };
+  // На узком экране поле и программа стоят друг под другом: после запуска прокручиваем к результату
+  function revealOnPhone(node) {
+    if (!node || !window.matchMedia('(max-width: 920px)').matches) return;
+    var r = node.getBoundingClientRect();
+    if (r.top >= 0 && r.bottom <= window.innerHeight) return;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    node.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+  }
+
+  root.Common = { Store: Store, revealOnPhone: revealOnPhone, Grades: Grades, el: el, stamp: stamp, clearStamp: clearStamp, wait: wait, delayFor: delayFor, levelButtons: levelButtons };
 })(this);

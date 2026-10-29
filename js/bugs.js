@@ -158,6 +158,7 @@
     state.token = token;
     $('b-run').disabled = true;
     setStatus(I18n.t('b.running'), '');
+    Common.revealOnPhone(state.field.container);
     var walked = [out.path[0]], i = 0;
     (function step() {
       if (token.cancelled) return;

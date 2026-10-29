@@ -31,6 +31,8 @@
   --cell: 22px;
   --radius: 6px;
   --margin-x: 72px;
+  --wrap: 1240px;
+  --kg-px: 10px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -102,7 +104,8 @@ body::after {
   content: "";
   position: fixed;
   top: 0; bottom: 0;
-  left: calc(var(--margin-x) - 2px);
+  /* поля идут по левому краю колонки с контентом, а не по краю окна */
+  left: calc(max(0px, (100vw - var(--wrap)) / 2) + var(--margin-x) - 2px);
   width: 2px;
   background: var(--redpen);
   opacity: .55;
@@ -122,7 +125,7 @@ code, kbd { font-family: var(--font-code); font-size: .92em; }
 .wrap {
   position: relative;
   z-index: 1;
-  max-width: 1240px;
+  max-width: var(--wrap);
   margin: 0 auto;
   padding-left: max(16px, calc(var(--margin-x) + 24px), env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -308,7 +311,8 @@ code, kbd { font-family: var(--font-code); font-size: .92em; }
 .field {
   position: relative;
   display: grid;
-  width: min(100%, calc(var(--w) * 64px));
+  /* поле занимает максимум места, но целиком помещается по высоте экрана */
+  width: min(100%, calc(var(--w) * 96px), calc(max(260px, 100vh - 300px) * var(--w) / var(--h)));
   aspect-ratio: var(--w) / var(--h);
   background: var(--surface);
   border: 2px solid var(--graphite);
@@ -575,6 +579,7 @@ code, kbd { font-family: var(--font-code); font-size: .92em; }
   font-family: var(--font-display); font-weight: 700; font-size: 16px;
   color: #fff8ec;
   text-shadow: 0 1px 0 var(--box-dark);
+  height: calc(34px + var(--kg) * var(--kg-px));
   transition: height .3s ease, transform .3s ease, box-shadow .15s;
   cursor: pointer;
   padding: 0;
@@ -625,3 +630,113 @@ code, kbd { font-family: var(--font-code); font-size: .92em; }
 .code .pad { white-space: pre; flex: none; }
 .code li > span:not(.ln):not(.ind) { white-space: pre; }
 .panel > .stamp { top: -34px; right: 10px; }
+
+/* ================= Адаптив: телефон ================= */
+@media (max-width: 760px) {
+  .topbar { padding-block: 10px 6px; }
+  .topbar .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; align-items: center; }
+  .brand { grid-column: 1; grid-row: 1; font-size: 14px; }
+  .lang { grid-column: 2; grid-row: 1; }
+  .theme-toggle { grid-column: 3; grid-row: 1; padding: 5px 10px; }
+  /* игры в одну строку с прокруткой вбок */
+  .topnav { grid-column: 1 / -1; grid-row: 2; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .topnav::-webkit-scrollbar { display: none; }
+  .topnav a { white-space: nowrap; flex: none; }
+
+  .view { padding-block: 4px 40px; }
+  .game-head { margin-bottom: 8px; gap: 4px 10px; }
+  .game-head h2 { font-size: 26px; }
+  .game-head .klass { font-size: 21px; }
+  .back { padding-block: 4px; }
+
+  /* уровни в одну строку; запас сверху под оценку */
+  .levels { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 4px; padding-top: 12px; margin-top: -8px; margin-bottom: 12px; }
+  .levels::-webkit-scrollbar { display: none; }
+  .lvl { flex: none; width: 32px; height: 36px; font-size: 15px; }
+  .lvl.wide { padding: 0 10px; }
+  .lvl .mark { right: -4px; font-size: 20px; }
+
+  .task h3 { font-size: 21px; }
+  .task p { margin-top: 6px; }
+  .game-grid, .sort-layout { gap: 18px; }
+  .panel { padding: 14px 12px; }
+
+  /* iOS приближает страницу, если шрифт поля меньше 16px */
+  input, select, textarea, .code select.tok, .editor textarea { font-size: 16px; }
+
+  .blk .x { width: 34px; height: 34px; }
+  .slot-add { padding: 9px 10px; }
+  .program-area { min-height: 60px; }
+
+  .code { font-size: 14px; }
+  .code .ln { flex-basis: 24px; padding-right: 6px; }
+  .code .ind { flex-basis: 46px; }
+  .code .ind button { width: 22px; height: 26px; }
+
+  /* главы квеста — лента с прокруткой */
+  .chapters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 4px; padding-bottom: 2px; }
+  .chapters::-webkit-scrollbar { display: none; }
+  .chapters li { flex: none; }
+  .chapters button { white-space: nowrap; grid-template-columns: auto auto auto; padding: 8px 12px; }
+  .editor textarea { min-height: 200px; }
+  .journal { max-height: none; }
+
+  :root { --kg-px: 8px; }
+  .belt { min-height: 190px; padding-top: 16px; }
+  .counter-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 24px; }
+  .counter b { font-size: 24px; }
+  .speed { margin-left: 0; }
+}
+
+/* ================= Адаптив: широкий экран, 1080p и интерактивная доска ================= */
+@media (min-width: 1200px) {
+  /* заголовок игры и уровни в одну строку, чтобы игра влезала в экран */
+  .view:not(.home) > .wrap { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 32px; align-items: end; }
+  .view:not(.home) > .wrap > * { grid-column: 1 / -1; }
+  .view:not(.home) > .wrap > .game-head { grid-column: 1; }
+  .view:not(.home) > .wrap > .levels { grid-column: 2; justify-self: end; margin-bottom: 14px; }
+}
+
+@media (min-width: 1600px) {
+  :root { --wrap: 1640px; --cell: 24px; --kg-px: 13px; }
+  body { font-size: 17px; }
+  .topbar { padding-block: 18px; }
+  .brand { font-size: 17px; }
+  .topnav a { font-size: 15px; padding: 7px 12px; }
+
+  .game-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 40px; }
+  .game-head h2 { font-size: 44px; }
+  .lvl { width: 46px; height: 46px; font-size: 18px; }
+  .task h3 { font-size: 28px; }
+  .task p:not(.task-topic) { font-size: 18px; }
+  .status { font-size: 17px; }
+  .panel { padding: 20px 22px; }
+
+  .pal { font-size: 17px; padding: 10px 16px; }
+  .blk { font-size: 17px; }
+  .blk-row { min-height: 44px; }
+  .btn { font-size: 17px; padding: 10px 18px; }
+
+  .code { font-size: 18px; }
+  .code li { min-height: 38px; }
+  .code select.tok { font-size: 18px; }
+  .watch { font-size: 16px; }
+
+  .quest-grid { grid-template-columns: 250px minmax(0, 1fr) minmax(0, 1.15fr); gap: 32px; }
+  .chapters button { font-size: 16px; padding: 10px 12px; }
+  .editor textarea, .editor .gutter { font-size: 17px; }
+  .editor textarea { min-height: 330px; }
+  .journal { max-height: calc(100vh - 640px); min-height: 160px; }
+  .entry { font-size: 15px; }
+  .api { font-size: 15px; }
+
+  .crate { width: 80px; font-size: 19px; }
+  .belt { min-height: 270px; }
+  .gap-btn { width: 36px; height: 36px; font-size: 16px; }
+  .pseudo { font-size: 16px; }
+  .counter b { font-size: 34px; }
+  .sort-layout { gap: 40px; }
+}
+
+/* колонки не растягиваются шириной ленты или кода: те прокручиваются внутри себя */
+.game-grid > *, .sort-layout > *, .quest-grid > * { min-width: 0; }

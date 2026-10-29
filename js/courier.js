@@ -199,6 +199,7 @@
     state.token = token;
     $('c-run').disabled = true;
     $('c-stop').disabled = false;
+    Common.revealOnPhone(state.field.container);
     setStatus(I18n.t('c.running'), '');
     var walked = [out.path[0]];
     var i = 0;

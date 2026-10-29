@@ -135,6 +135,7 @@
     }).then(function (res) {
       $('q-loading').textContent = '';
       renderJournal(res);
+      Common.revealOnPhone($('q-journal').parentNode);
       var panel = $('q-journal').parentNode;
       if (res.ok) {
         Grades.set('python', c.id, 5);
