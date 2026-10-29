@@ -33,16 +33,16 @@
       var pickable = manual && mode() === 'select';
       var crate = el('button', {
         class: cls, type: 'button', style: 'height:' + (34 + b.w * 10) + 'px' + (pickable ? '' : ';cursor:default'),
-        'aria-label': 'Ящик ' + b.w + ' кг, позиция ' + i,
+        'aria-label': I18n.t('s.box.aria', { w: b.w, i: i }),
         tabindex: pickable ? null : '-1',
         onclick: function () { pickBox(i); }
-      }, String(b.w), el('small', { text: 'кг' }));
+      }, String(b.w), el('small', { text: I18n.t('s.kg') }));
       belt.appendChild(el('div', { class: 'slot-col' }, crate, el('span', { class: 'pos', text: 'a[' + i + ']' })));
       if (i < state.boxes.length - 1) {
         if (bubbleManual) {
           belt.appendChild(el('button', {
-            class: 'gap-btn', type: 'button', title: 'Поменять соседей',
-            'aria-label': 'Поменять ящики ' + i + ' и ' + (i + 1),
+            class: 'gap-btn', type: 'button', title: I18n.t('s.swap.title'),
+            'aria-label': I18n.t('s.swap.aria', { i: i, j: i + 1 }),
             onclick: function () { swapMove(i, i + 1); }
           }, '⇄'));
         } else {
@@ -60,14 +60,14 @@
     var c = $('s-counters');
     c.innerHTML = '';
     if (state.demo || state.idx === LAB) {
-      c.appendChild(counter('сравнений', state.cmp));
-      c.appendChild(counter('обменов', state.swaps));
-      c.appendChild(counter('ящиков', state.boxes.length));
+      c.appendChild(counter(I18n.t('s.cmp'), state.cmp));
+      c.appendChild(counter(I18n.t('s.swaps'), state.swaps));
+      c.appendChild(counter(I18n.t('s.boxes'), state.boxes.length));
     } else {
       var lim = SortCore.limitFor(level());
-      c.appendChild(counter('ходов сделано', state.moves, state.moves > lim));
-      c.appendChild(counter('минимум ходов', lim));
-      c.appendChild(counter('осталось до «5»', Math.max(0, lim - state.moves)));
+      c.appendChild(counter(I18n.t('s.moves'), state.moves, state.moves > lim));
+      c.appendChild(counter(I18n.t('s.min'), lim));
+      c.appendChild(counter(I18n.t('s.left'), Math.max(0, lim - state.moves)));
     }
   }
 
@@ -75,29 +75,27 @@
     var p = $('s-pseudo');
     p.innerHTML = '';
     SortCore.PSEUDO[mode()].forEach(function (l, i) {
-      p.appendChild(el('li', { class: i === line ? 'cur' : '', text: l }));
+      p.appendChild(el('li', { class: i === line ? 'cur' : '', text: I18n.pick(l) }));
     });
-    $('s-algo-name').textContent = mode() === 'bubble' ? 'Сортировка пузырьком' : 'Сортировка выбором';
-    $('s-algo-note').textContent = mode() === 'bubble'
-      ? 'Тяжёлый ящик за один проход «всплывает» в конец, как пузырёк. Меняются только соседи, поэтому обменов столько же, сколько пар стоит не по порядку.'
-      : 'На каждом проходе ищем самый лёгкий ящик и одним обменом ставим его на место. Обменов не больше n − 1, но сравнений всё равно много.';
+    $('s-algo-name').textContent = I18n.t(mode() === 'bubble' ? 's.bubble' : 's.select');
+    $('s-algo-note').textContent = I18n.t(mode() === 'bubble' ? 's.note.bubble' : 's.note.select');
   }
 
   function renderControls() {
     var c = $('s-controls');
     c.innerHTML = '';
-    var speed = el('label', { class: 'speed' }, 'Скорость ', el('input', { type: 'range', id: 's-speed', min: '1', max: '5', value: String(Store.get('sort:speed', 3)), oninput: function () { Store.set('sort:speed', +this.value); } }));
+    var speed = el('label', { class: 'speed' }, I18n.t('game.speed') + ' ', el('input', { type: 'range', id: 's-speed', min: '1', max: '5', value: String(Store.get('sort:speed', 3)), oninput: function () { Store.set('sort:speed', +this.value); } }));
     if (state.idx === LAB) {
-      var sel = el('select', { id: 's-algo', class: 'btn', 'aria-label': 'Алгоритм', onchange: function () { state.labAlgo = this.value; resetLab(false); } },
-        el('option', { value: 'bubble', selected: state.labAlgo === 'bubble' }, 'Пузырёк'),
-        el('option', { value: 'select', selected: state.labAlgo === 'select' }, 'Выбор'));
-      c.appendChild(el('button', { class: 'btn primary', type: 'button', id: 's-play', onclick: togglePlay }, state.token ? '■ Стоп' : '▶ Запуск'));
+      var sel = el('select', { id: 's-algo', class: 'btn', 'aria-label': I18n.t('s.algo.aria'), onchange: function () { state.labAlgo = this.value; resetLab(false); } },
+        el('option', { value: 'bubble', selected: state.labAlgo === 'bubble' }, I18n.t('s.opt.bubble')),
+        el('option', { value: 'select', selected: state.labAlgo === 'select' }, I18n.t('s.opt.select')));
+      c.appendChild(el('button', { class: 'btn primary', type: 'button', id: 's-play', onclick: togglePlay }, I18n.t(state.token ? 's.stop' : 's.play')));
       c.appendChild(sel);
-      c.appendChild(el('button', { class: 'btn', type: 'button', onclick: function () { resetLab(true); } }, 'Перемешать'));
+      c.appendChild(el('button', { class: 'btn', type: 'button', onclick: function () { resetLab(true); } }, I18n.t('s.shuffle')));
       c.appendChild(speed);
     } else {
-      c.appendChild(el('button', { class: 'btn', type: 'button', onclick: function () { loadLevel(state.idx); } }, 'Начать заново'));
-      c.appendChild(el('button', { class: 'btn ghost', type: 'button', id: 's-play', onclick: togglePlay }, state.token ? '■ Стоп' : 'Показать, как сделает алгоритм'));
+      c.appendChild(el('button', { class: 'btn', type: 'button', onclick: function () { loadLevel(state.idx); } }, I18n.t('s.restart')));
+      c.appendChild(el('button', { class: 'btn ghost', type: 'button', id: 's-play', onclick: togglePlay }, I18n.t(state.token ? 's.stop' : 's.show')));
       c.appendChild(speed);
     }
   }
@@ -108,7 +106,7 @@
     box.appendChild(el('button', {
       class: 'lvl wide', type: 'button', 'aria-current': state.idx === LAB ? 'true' : 'false',
       onclick: function () { loadLab(); }
-    }, 'Лаборатория'));
+    }, I18n.t('s.lab')));
   }
 
   function renderTask() {
@@ -116,16 +114,16 @@
     t.innerHTML = '';
     if (state.idx === LAB) {
       t.appendChild(el('div', null,
-        el('p', { class: 'task-topic', text: 'Лаборатория' }),
-        el('h3', { text: 'Сравни алгоритмы' }),
-        el('p', { text: 'Запусти пузырёк и выбор на одном и том же наборе. Следи за счётчиками: какой алгоритм делает меньше обменов? А сравнений?' })));
+        el('p', { class: 'task-topic', text: I18n.t('s.lab') }),
+        el('h3', { text: I18n.t('s.lab.h') }),
+        el('p', { text: I18n.t('s.lab.p') })));
       return;
     }
     var lv = level(), i = state.idx;
     t.appendChild(el('div', null,
-      el('p', { class: 'task-topic', text: 'Уровень ' + (i + 1) + ' · ' + (lv.mode === 'bubble' ? 'обмен соседей' : 'обмен любых двух') }),
-      el('h3', { text: lv.title }),
-      el('p', { text: lv.text })));
+      el('p', { class: 'task-topic', text: I18n.t(lv.mode === 'bubble' ? 's.topic.bubble' : 's.topic.select', { n: i + 1 }) }),
+      el('h3', { text: I18n.pick(lv.title) }),
+      el('p', { text: I18n.pick(lv.text) })));
   }
 
   function renderAll(anim, line) {
@@ -145,7 +143,7 @@
     state.moves = 0; state.sel = null; state.marks = {}; state.demo = false;
     state.cmp = 0; state.swaps = 0;
     Common.clearStamp($('s-belt').parentNode.parentNode);
-    setStatus(level().mode === 'bubble' ? 'Нажимай ⇄ между ящиками, чтобы поменять соседей.' : 'Нажми на ящик, потом на второй, и кран поменяет их местами.', '');
+    setStatus(I18n.t(level().mode === 'bubble' ? 's.start.bubble' : 's.start.select'), '');
     renderLevels(); renderTask(); renderAll();
   }
 
@@ -170,7 +168,7 @@
     state.boxes = makeBoxes(state.labSeed);
     state.cmp = 0; state.swaps = 0; state.marks = {}; state.sel = null;
     Common.clearStamp($('s-belt').parentNode.parentNode);
-    setStatus('Нажми «Запуск». Набор ящиков тот же, пока не нажмёшь «Перемешать».', '');
+    setStatus(I18n.t('s.start.lab'), '');
     renderAll();
   }
 
@@ -181,7 +179,7 @@
   function swapMove(i, j) {
     if (state.token) return;
     var lv = level(), lim = SortCore.limitFor(lv);
-    if (state.moves >= lim + 4) { setStatus('Ходы закончились. Нажми «Начать заново».', 'err'); return; }
+    if (state.moves >= lim + 4) { setStatus(I18n.t('s.noMoves'), 'err'); return; }
     var wasted = lv.mode === 'bubble' && state.boxes[i].w < state.boxes[j].w;
     swap(i, j);
     state.moves++;
@@ -193,14 +191,14 @@
       Common.stamp($('s-belt').parentNode.parentNode, grade);
       state.marks = { done: function () { return true; } };
       renderBelt();
-      setStatus('Готово! Ходов: ' + state.moves + ', минимум: ' + lim + '.' + (grade < 5 ? ' Попробуй уложиться в минимум.' : ''), 'win');
+      setStatus(I18n.t('s.done', { m: state.moves, l: lim }) + (grade < 5 ? I18n.t('s.done.better') : ''), 'win');
       renderLevels();
     } else if (state.moves >= lim + 4) {
-      setStatus('Ходы закончились, а ящики не по порядку. Нажми «Начать заново».', 'err');
+      setStatus(I18n.t('s.outOfMoves'), 'err');
     } else if (wasted) {
-      setStatus('Эти два ящика уже стояли по порядку, ход потрачен зря.', 'err');
+      setStatus(I18n.t('s.wasted'), 'err');
     } else if (state.moves === lim) {
-      setStatus('Это был последний ход на «5». Дальше оценка будет ниже.', '');
+      setStatus(I18n.t('s.last5'), '');
     } else {
       setStatus('', '');
     }
@@ -209,7 +207,7 @@
   function pickBox(i) {
     if (state.token || state.idx === LAB || mode() !== 'select') return;
     if (SortCore.isSorted(weights()) && state.moves) return;
-    if (state.sel === null) { state.sel = i; renderBelt(); setStatus('Теперь выбери второй ящик.', ''); return; }
+    if (state.sel === null) { state.sel = i; renderBelt(); setStatus(I18n.t('s.second'), ''); return; }
     if (state.sel === i) { state.sel = null; renderBelt(); setStatus('', ''); return; }
     var a = state.sel;
     state.sel = null;
@@ -217,7 +215,7 @@
   }
 
   function togglePlay() {
-    if (state.token) { stopDemo(); renderControls(); setStatus('Остановлено.', ''); } else playDemo();
+    if (state.token) { stopDemo(); renderControls(); setStatus(I18n.t('s.stopped'), ''); } else playDemo();
   }
 
   function stopDemo() {
@@ -243,7 +241,7 @@
     var n = state.boxes.length;
     var doneFrom = m === 'bubble' ? n : -1;
     renderAll();
-    setStatus('Алгоритм работает. Жёлтая строка справа показывает, что он делает.', '');
+    setStatus(I18n.t('s.algoRun'), '');
     var k = 0;
     (function next() {
       if (token.cancelled) return;
@@ -251,7 +249,7 @@
         state.token = null;
         state.marks = { done: function () { return true; } };
         renderAll();
-        setStatus('Готово: сравнений ' + state.cmp + ', обменов ' + state.swaps + '.' + (state.idx !== LAB ? ' Теперь попробуй сам, кнопка «Начать заново».' : ''), 'win');
+        setStatus(I18n.t('s.demoDone', { c: state.cmp, s: state.swaps }) + (state.idx !== LAB ? I18n.t('s.demoDone.try') : ''), 'win');
         return;
       }
       var s = st[k++], anim = null;
@@ -279,5 +277,10 @@
     loadLevel(Math.min(Store.get('sort:level', 0), LEVELS.length - 1));
   }
 
-  root.SortGame = { init: init, leave: stopDemo, refresh: renderLevels };
+  root.SortGame = {
+    init: init, leave: stopDemo, refresh: renderLevels,
+    relang: function () {
+      if (state.idx === LAB) { stopDemo(); renderLevels(); renderTask(); resetLab(false); } else loadLevel(state.idx);
+    }
+  };
 })(this);

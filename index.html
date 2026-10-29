@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="kk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Алгоритмы и программирование</title>
-<meta name="description" content="Четыре игры по информатике для 5–9 классов: Робот-курьер, Баг-хантер, Python-квест и Сортировочный цех.">
+<title>Алгоритмдер және бағдарламалау</title>
+<meta name="description" content="5–9 сыныптарға арналған информатика ойындары: Робот-курьер, Баг-аңшы, Python-квест және Сұрыптау цехы. Игры по информатике для 5–9 классов на казахском и русском.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Tektur:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&family=Tektur:wght@500;600;700&display=swap">
 <link rel="stylesheet" href="css/style.css">
 <script>
   try { var t = localStorage.getItem('algo:theme'); if (t) document.documentElement.setAttribute('data-theme', JSON.parse(t)); } catch (e) {}
@@ -17,43 +17,47 @@
 
 <header class="topbar">
   <div class="wrap">
-    <a class="brand" href="#">Алгоритмы<br>и программирование<span>.</span></a>
-    <nav class="topnav" aria-label="Игры">
-      <a href="#robot">Робот-курьер</a>
-      <a href="#bugs">Баг-хантер</a>
-      <a href="#python">Python-квест</a>
-      <a href="#sort">Сортировочный цех</a>
+    <a class="brand" href="#"><span data-i18n-html="brand">Алгоритмдер<br>және бағдарламалау</span><span class="dot">.</span></a>
+    <nav class="topnav" aria-label="Ойындар" data-i18n-attr="aria-label:nav.aria">
+      <a href="#robot" data-i18n="nav.robot">Робот-курьер</a>
+      <a href="#bugs" data-i18n="nav.bugs">Баг-аңшы</a>
+      <a href="#python" data-i18n="nav.python">Python-квест</a>
+      <a href="#sort" data-i18n="nav.sort">Сұрыптау цехы</a>
     </nav>
-    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Сменить оформление">Тетрадь</button>
+    <div class="lang" role="group" aria-label="Тіл" data-i18n-attr="aria-label:lang.aria">
+      <button type="button" data-lang="kk" lang="kk" aria-pressed="true">ҚАЗ</button>
+      <button type="button" data-lang="ru" lang="ru" aria-pressed="false">РУС</button>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Безендіруді ауыстыру" data-i18n-attr="aria-label:theme.aria">Дәптер</button>
   </div>
 </header>
 
 <main>
-  <!-- ===================== ГЛАВНАЯ ===================== -->
+  <!-- ===================== БАСТЫ БЕТ / ГЛАВНАЯ ===================== -->
   <section class="view home" id="view-home" data-view="home">
     <div class="wrap">
       <div class="hero">
         <div>
-          <h1>Алгоритмы <span class="scrawl">и&nbsp;программирование<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 60 6, 120 4, 180 9 S 270 15, 297 6"/></svg></span></h1>
-          <p class="lede">Четыре игры для 5–9 классов. Начинаем с команд роботу, заканчиваем сортировкой и настоящим Python. За каждый уровень учитель-программа ставит оценку.</p>
+          <h1><span data-i18n="hero.a">Алгоритмдер және</span> <span class="scrawl"><span data-i18n="hero.b">бағдарламалау</span><svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 60 6, 120 4, 180 9 S 270 15, 297 6"/></svg></span></h1>
+          <p class="lede" data-i18n="hero.lede">5–9 сыныптарға арналған төрт ойын.</p>
         </div>
-        <div class="cover" aria-label="Обложка тетради">
-          <p class="cover-kicker">ТЕТРАДЬ</p>
-          <p class="cover-sub">для игр по информатике</p>
-          <label class="cover-row">ученика(цы) <input id="student-name" autocomplete="off" maxlength="28" placeholder="имя"></label>
-          <label class="cover-row"><input id="student-class" autocomplete="off" maxlength="4" placeholder="6А"> класса</label>
+        <div class="cover" aria-label="Дәптер мұқабасы" data-i18n-attr="aria-label:cover.aria">
+          <p class="cover-kicker" data-i18n="cover.kicker">ДӘПТЕР</p>
+          <p class="cover-sub" data-i18n="cover.sub">информатика ойындарына арналған</p>
+          <label class="cover-row"><span data-i18n="cover.student">оқушы</span> <input id="student-name" autocomplete="off" maxlength="28" placeholder="аты" data-i18n-attr="placeholder:cover.name"></label>
+          <label class="cover-row"><input id="student-class" autocomplete="off" maxlength="4" placeholder="6А"> <span data-i18n="cover.class">сынып</span></label>
         </div>
       </div>
 
       <div class="toc">
-        <div class="toc-head"><h2>Содержание</h2><p>Игры идут по возрастанию сложности</p></div>
+        <div class="toc-head"><h2 data-i18n="toc.head">Мазмұны</h2><p data-i18n="toc.sub">Ойындар күрделілігі бойынша реттелген</p></div>
         <ol class="toc-list" id="toc"></ol>
       </div>
 
       <div class="home-note">
-        <div><h3>Как ставятся оценки</h3><p>«5» за решение не длиннее эталонного, «4», если программа работает, но вышла длиннее или понадобилась подсказка. Оценки хранятся в этом браузере.</p></div>
-        <div><h3>Без сервера</h3><p>Всё работает прямо в браузере, Python тоже: его исполняет Skulpt. Сайт можно открыть с флешки или выложить на GitHub Pages.</p></div>
-        <div><h3>Учителю</h3><p>Уровни описаны в файлах <code>js/*-core.js</code> обычными массивами. Новый уровень добавляется копированием соседнего.</p></div>
+        <div><h3 data-i18n="note.grades.h">Баға қалай қойылады</h3><p data-i18n="note.grades.p"></p></div>
+        <div><h3 data-i18n="note.server.h">Серверсіз</h3><p data-i18n="note.server.p"></p></div>
+        <div><h3 data-i18n="note.teacher.h">Мұғалімге</h3><p data-i18n="note.teacher.p"></p></div>
       </div>
     </div>
   </section>
@@ -62,10 +66,10 @@
   <section class="view" id="view-robot" data-view="robot" hidden>
     <div class="wrap">
       <div class="game-head">
-        <a class="back" href="#">← Содержание</a>
-        <h2>Робот-курьер</h2><span class="klass">5–6 класс</span>
+        <a class="back" href="#" data-i18n="game.back">← Мазмұны</a>
+        <h2 data-i18n="nav.robot">Робот-курьер</h2><span class="klass" data-i18n="klass.56">5–6 сынып</span>
       </div>
-      <div class="levels" id="c-levels" aria-label="Уровни"></div>
+      <div class="levels" id="c-levels" aria-label="Деңгейлер" data-i18n-attr="aria-label:game.levels"></div>
       <div class="game-grid">
         <div>
           <div class="task" id="c-task"></div>
@@ -73,48 +77,48 @@
           <p class="status" id="c-status" role="status"></p>
         </div>
         <div class="panel">
-          <div class="panel-title"><span>Команды</span></div>
+          <div class="panel-title"><span data-i18n="c.commands">Командалар</span></div>
           <div class="palette" id="c-palette"></div>
-          <p class="pal-hint">Нажми на команду, и она встанет туда, где горит жёлтая строка. Чтобы положить блок внутрь цикла, сначала нажми на его пустую строку.</p>
-          <div class="panel-title" style="margin-top:18px"><span>Программа</span><b id="c-count"></b></div>
+          <p class="pal-hint" data-i18n="c.hint"></p>
+          <div class="panel-title" style="margin-top:18px"><span data-i18n="c.program">Бағдарлама</span><b id="c-count"></b></div>
           <div class="program-area" id="c-program"></div>
           <div class="controls">
-            <button class="btn primary" id="c-run" type="button">▶ Запустить</button>
-            <button class="btn" id="c-stop" type="button" disabled>■ Стоп</button>
-            <button class="btn ghost" id="c-clear" type="button">Очистить</button>
-            <label class="speed">Скорость <input type="range" id="c-speed" min="1" max="5" value="3"></label>
+            <button class="btn primary" id="c-run" type="button" data-i18n="c.run">▶ Іске қосу</button>
+            <button class="btn" id="c-stop" type="button" disabled data-i18n="c.stop">■ Тоқта</button>
+            <button class="btn ghost" id="c-clear" type="button" data-i18n="c.clear">Тазалау</button>
+            <label class="speed"><span data-i18n="game.speed">Жылдамдық</span> <input type="range" id="c-speed" min="1" max="5" value="3"></label>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===================== БАГ-ХАНТЕР ===================== -->
+  <!-- ===================== БАГ-АҢШЫ / БАГ-ХАНТЕР ===================== -->
   <section class="view" id="view-bugs" data-view="bugs" hidden>
     <div class="wrap">
       <div class="game-head">
-        <a class="back" href="#">← Содержание</a>
-        <h2>Баг-хантер</h2><span class="klass">7–9 класс</span>
+        <a class="back" href="#" data-i18n="game.back">← Мазмұны</a>
+        <h2 data-i18n="nav.bugs">Баг-аңшы</h2><span class="klass" data-i18n="klass.79">7–9 сынып</span>
       </div>
-      <div class="levels" id="b-levels" aria-label="Уровни"></div>
+      <div class="levels" id="b-levels" aria-label="Деңгейлер" data-i18n-attr="aria-label:game.levels"></div>
       <div class="game-grid">
         <div>
           <div class="task" id="b-task"></div>
           <div class="field-wrap" id="b-field"></div>
-          <div class="legend"><span><i></i>нужный маршрут</span><span><i class="red"></i>куда едет робот</span></div>
+          <div class="legend"><span><i></i><span data-i18n="b.legend.ghost">керекті бағыт</span></span><span><i class="red"></i><span data-i18n="b.legend.actual">робот қайда барады</span></span></div>
           <p class="status" id="b-status" role="status"></p>
         </div>
         <div class="panel">
-          <div class="panel-title"><span>Программа робота</span><b id="b-count"></b></div>
+          <div class="panel-title"><span data-i18n="b.program">Робот бағдарламасы</span><b id="b-count"></b></div>
           <ol class="code" id="b-code"></ol>
           <p class="watch" id="b-watch"></p>
           <div class="controls">
-            <button class="btn primary" id="b-run" type="button">▶ Проверить</button>
-            <button class="btn" id="b-reset" type="button">Вернуть как было</button>
-            <button class="btn ghost" id="b-hint" type="button">Подсказка</button>
-            <label class="speed">Скорость <input type="range" id="b-speed" min="1" max="5" value="3"></label>
+            <button class="btn primary" id="b-run" type="button" data-i18n="b.run">▶ Тексеру</button>
+            <button class="btn" id="b-reset" type="button" data-i18n="b.reset">Бастапқы күйге қайтару</button>
+            <button class="btn ghost" id="b-hint" type="button" data-i18n="b.hint">Кеңес</button>
+            <label class="speed"><span data-i18n="game.speed">Жылдамдық</span> <input type="range" id="b-speed" min="1" max="5" value="3"></label>
           </div>
-          <p class="hidden-note">Подчёркнутые слова и числа можно менять. Исправлять разрешено ограниченное число мест, поэтому сначала подумай, потом меняй.</p>
+          <p class="hidden-note" data-i18n="b.note"></p>
         </div>
       </div>
     </div>
@@ -124,11 +128,11 @@
   <section class="view" id="view-python" data-view="python" hidden>
     <div class="wrap">
       <div class="game-head">
-        <a class="back" href="#">← Содержание</a>
-        <h2>Python-квест: ночь в музее</h2><span class="klass">8–9 класс</span>
+        <a class="back" href="#" data-i18n="game.back">← Мазмұны</a>
+        <h2 data-i18n="q.title">Python-квест: мұражайдағы түн</h2><span class="klass" data-i18n="klass.89">8–9 сынып</span>
       </div>
       <div class="quest-grid">
-        <ol class="chapters" id="q-chapters" aria-label="Главы"></ol>
+        <ol class="chapters" id="q-chapters" aria-label="Тараулар" data-i18n-attr="aria-label:q.chapters"></ol>
         <div>
           <div class="story" id="q-story"></div>
           <div class="api" id="q-api"></div>
@@ -136,30 +140,30 @@
         <div>
           <div class="editor">
             <div class="gutter" id="q-gutter" aria-hidden="true">1</div>
-            <textarea id="q-code" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Код на Python"></textarea>
+            <textarea id="q-code" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Python коды" data-i18n-attr="aria-label:q.code.aria"></textarea>
           </div>
           <div class="controls">
-            <button class="btn primary" id="q-run" type="button">▶ Запустить</button>
-            <button class="btn" id="q-reset" type="button">Начать главу заново</button>
+            <button class="btn primary" id="q-run" type="button" data-i18n="q.run">▶ Іске қосу</button>
+            <button class="btn" id="q-reset" type="button" data-i18n="q.reset">Тарауды қайта бастау</button>
             <span class="loading-note" id="q-loading"></span>
           </div>
           <div class="panel" style="margin-top:16px">
-            <div class="panel-title"><span>Журнал героя</span><b id="q-lines"></b></div>
-            <div class="journal" id="q-journal"><p class="empty">Здесь каждое действие героя появится строчкой кода.</p></div>
+            <div class="panel-title"><span data-i18n="q.journal">Кейіпкер журналы</span><b id="q-lines"></b></div>
+            <div class="journal" id="q-journal"></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===================== СОРТИРОВОЧНЫЙ ЦЕХ ===================== -->
+  <!-- ===================== СҰРЫПТАУ ЦЕХЫ / СОРТИРОВОЧНЫЙ ЦЕХ ===================== -->
   <section class="view" id="view-sort" data-view="sort" hidden>
     <div class="wrap">
       <div class="game-head">
-        <a class="back" href="#">← Содержание</a>
-        <h2>Сортировочный цех</h2><span class="klass">8–9 класс</span>
+        <a class="back" href="#" data-i18n="game.back">← Мазмұны</a>
+        <h2 data-i18n="nav.sort">Сұрыптау цехы</h2><span class="klass" data-i18n="klass.89">8–9 сынып</span>
       </div>
-      <div class="levels" id="s-levels" aria-label="Уровни"></div>
+      <div class="levels" id="s-levels" aria-label="Деңгейлер" data-i18n-attr="aria-label:game.levels"></div>
       <div class="sort-layout">
         <div>
           <div class="task" id="s-task"></div>
@@ -171,7 +175,7 @@
           <div class="controls" id="s-controls"></div>
         </div>
         <div class="panel">
-          <div class="panel-title"><span id="s-algo-name">Алгоритм</span></div>
+          <div class="panel-title"><span id="s-algo-name" data-i18n="s.algo">Алгоритм</span></div>
           <ol class="pseudo" id="s-pseudo"></ol>
           <p class="hidden-note" id="s-algo-note"></p>
         </div>
@@ -180,6 +184,7 @@
   </section>
 </main>
 
+<script src="js/i18n.js"></script>
 <script src="js/world.js"></script>
 <script src="js/courier-core.js"></script>
 <script src="js/bugs-core.js"></script>

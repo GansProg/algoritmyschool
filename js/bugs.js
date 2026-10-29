@@ -38,8 +38,8 @@
       var li = el('li', { 'data-line': i }, el('span', { class: 'ln', text: String(i + 1) }));
       var ind = el('span', { class: 'ind' });
       if (l.indentEditable) {
-        ind.appendChild(el('button', { type: 'button', 'aria-label': 'Убрать отступ в строке ' + (i + 1), title: 'Убрать отступ', onclick: function () { if (l.indent > 0) { l.indent--; changed(); } } }, '⇤'));
-        ind.appendChild(el('button', { type: 'button', 'aria-label': 'Добавить отступ в строке ' + (i + 1), title: 'Добавить отступ', onclick: function () { if (l.indent < 3) { l.indent++; changed(); } } }, '⇥'));
+        ind.appendChild(el('button', { type: 'button', 'aria-label': I18n.t('b.unindent.aria', { n: i + 1 }), title: I18n.t('b.unindent'), onclick: function () { if (l.indent > 0) { l.indent--; changed(); } } }, '⇤'));
+        ind.appendChild(el('button', { type: 'button', 'aria-label': I18n.t('b.indent.aria', { n: i + 1 }), title: I18n.t('b.indent'), onclick: function () { if (l.indent < 3) { l.indent++; changed(); } } }, '⇥'));
       }
       li.appendChild(ind);
       if (l.indent) li.appendChild(el('span', { class: 'pad', text: '    '.repeat(l.indent) }));
@@ -49,7 +49,7 @@
         } else {
           var sel = el('select', {
             class: 'tok' + (p.value !== state.orig[i].parts[j].value ? ' changed' : ''),
-            'aria-label': 'Изменить значение в строке ' + (i + 1),
+            'aria-label': I18n.t('b.tok.aria', { n: i + 1 }),
             onchange: function () { p.value = this.value; changed(); }
           });
           optionsFor(p).forEach(function (o) { sel.appendChild(el('option', { value: o, selected: o === p.value }, o)); });
@@ -60,7 +60,7 @@
     });
     var c = changes(), lv = level();
     var cnt = $('b-count');
-    cnt.textContent = 'исправлений: ' + c + ' из ' + lv.fixes;
+    cnt.textContent = I18n.t('b.count', { c: c, f: lv.fixes });
     cnt.className = c > lv.fixes ? 'over' : '';
     if (state.hint) markHint();
   }
@@ -72,7 +72,7 @@
     renderCode();
     $('b-watch').textContent = '';
     var c = changes(), lv = level();
-    if (c > lv.fixes) setStatus('Правок больше, чем ошибок в программе (' + lv.fixes + '). Верни лишнее кнопкой «Вернуть как было» или выбери прежнее значение.', 'err');
+    if (c > lv.fixes) setStatus(I18n.t('b.tooMany', { f: lv.fixes }), 'err');
     else setStatus('', '');
   }
 
@@ -103,14 +103,14 @@
     state.hint = false;
     $('b-task').innerHTML = '';
     $('b-task').appendChild(el('div', null,
-      el('p', { class: 'task-topic', text: 'Баг ' + (i + 1) + ' · ' + (lv.fixes === 1 ? 'одна ошибка' : 'ошибок: ' + lv.fixes) }),
-      el('h3', { text: lv.title }),
-      el('p', { text: lv.text })));
+      el('p', { class: 'task-topic', text: I18n.t(lv.fixes === 1 ? 'b.topic1' : 'b.topicN', { n: i + 1, f: lv.fixes }) }),
+      el('h3', { text: I18n.pick(lv.title) }),
+      el('p', { text: I18n.pick(lv.text) })));
     state.field.load(lv);
     state.ghost = BugsCore.run(lv, lv.fixed).path;
     state.field.drawPath(state.ghost, 'ghost');
     $('b-watch').textContent = '';
-    setStatus('Нажми «Проверить», чтобы увидеть, куда на самом деле поедет робот.', '');
+    setStatus(I18n.t('b.start'), '');
     renderLevels();
     renderCode();
   }
@@ -132,7 +132,7 @@
   function showVars(v) {
     var w = $('b-watch');
     if (!v || !Object.keys(v).length) { w.textContent = ''; return; }
-    w.innerHTML = 'переменные: ' + Object.keys(v).map(function (k) { return '<b>' + k + ' = ' + v[k] + '</b>'; }).join(', ');
+    w.innerHTML = I18n.t('b.vars') + Object.keys(v).map(function (k) { return '<b>' + k + ' = ' + v[k] + '</b>'; }).join(', ');
   }
 
   function stop() {
@@ -151,13 +151,13 @@
     var out = BugsCore.run(lv, BugsCore.render(state.lines));
     if (out.kind === 'syntax') {
       highlight(out.line, 'err');
-      setStatus('Строка ' + (out.line + 1) + ': ' + out.message, 'err');
+      setStatus(I18n.t('b.syntax', { n: out.line + 1, m: I18n.t(out.message, { x: out.arg }) }), 'err');
       return;
     }
     var token = { cancelled: false };
     state.token = token;
     $('b-run').disabled = true;
-    setStatus('Робот выполняет программу…', '');
+    setStatus(I18n.t('b.running'), '');
     var walked = [out.path[0]], i = 0;
     (function step() {
       if (token.cancelled) return;
@@ -178,17 +178,17 @@
     var lv = level(), c = changes();
     if (out.kind === 'done') {
       if (c > lv.fixes) {
-        setStatus('Робот доехал, но правок ' + c + ', а ошибок было ' + lv.fixes + '. Найди решение, где меняется меньше.', 'err');
+        setStatus(I18n.t('b.winOver', { c: c, f: lv.fixes }), 'err');
         return;
       }
-      if (c === 0) { setStatus('Странно: ты ничего не менял, а робот доехал.', ''); return; }
+      if (c === 0) { setStatus(I18n.t('b.zero'), ''); return; }
       var grade = state.hint ? 4 : 5;
       Grades.set('bugs', lv.id, grade);
-      Common.stamp(state.field.container, grade, state.hint ? 'С подсказкой' : 'Баг пойман!');
-      setStatus('Баг исправлен! Маршрут совпал.' + (state.idx < LEVELS.length - 1 ? ' Следующий баг ждёт.' : ' Это был последний баг.'), 'win');
+      Common.stamp(state.field.container, grade, I18n.t(state.hint ? 'b.stamp.hint' : 'b.stamp.win'));
+      setStatus(I18n.t('b.win') + I18n.t(state.idx < LEVELS.length - 1 ? 'b.win.next' : 'b.win.last'), 'win');
       renderLevels();
     } else {
-      setStatus(out.message + (c === 0 ? ' Найди строку, из-за которой красный путь расходится с зелёным.' : ''), 'err');
+      setStatus(I18n.t(out.message) + (c === 0 ? I18n.t('b.failHint') : ''), 'err');
     }
   }
 
@@ -199,10 +199,19 @@
     $('b-hint').addEventListener('click', function () {
       state.hint = true;
       var line = markHint();
-      setStatus('Ошибка прячется в строке ' + (line + 1) + '. С подсказкой оценка будет «4».', '');
+      setStatus(I18n.t('b.hintMsg', { n: line + 1 }), '');
     });
     loadLevel(Math.min(Store.get('bugs:level', 0), LEVELS.length - 1));
   }
 
-  root.BugsGame = { init: init, leave: stop, refresh: renderLevels };
+  root.BugsGame = {
+    init: init, leave: stop, refresh: renderLevels,
+    // Смена языка не сбрасывает правки ученика
+    relang: function () {
+      var lines = state.lines, hint = state.hint;
+      loadLevel(state.idx);
+      state.lines = lines; state.hint = hint;
+      renderCode();
+    }
+  };
 })(this);

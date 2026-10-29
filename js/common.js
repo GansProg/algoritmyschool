@@ -49,16 +49,10 @@
     return node;
   }
 
-  var COMMENTS = {
-    5: ['Отлично!', 'Молодец!', 'Блестяще!', 'Чисто!'],
-    4: ['Хорошо!', 'Почти идеально', 'Можно короче'],
-    3: ['Работает', 'Есть над чем подумать']
-  };
-
   function stamp(container, grade, comment) {
     var old = container.querySelector('.stamp');
     if (old) old.remove();
-    var list = COMMENTS[grade] || COMMENTS[3];
+    var list = I18n.t('stamp.' + (grade >= 3 && grade <= 5 ? grade : 3));
     var s = el('div', { class: 'stamp', 'aria-hidden': 'true' },
       el('span', { class: 'grade', text: String(grade) }),
       el('span', { class: 'comment', text: comment || list[Math.floor(Math.random() * list.length)] }));
@@ -85,10 +79,11 @@
     container.innerHTML = '';
     levels.forEach(function (lv, i) {
       var g = Grades.get(game, lv.id);
+      var title = I18n.pick(lv.title);
       var b = el('button', {
-        class: 'lvl', type: 'button', title: lv.title,
+        class: 'lvl', type: 'button', title: title,
         'aria-current': i === current ? 'true' : 'false',
-        'aria-label': 'Уровень ' + (i + 1) + ': ' + lv.title + (g ? ', оценка ' + g : ''),
+        'aria-label': I18n.t('level.aria', { n: i + 1, t: title }) + (g ? I18n.t('level.grade', { g: g }) : ''),
         onclick: function () { onPick(i); }
       }, labelFn ? labelFn(lv, i) : String(i + 1), g ? el('span', { class: 'mark', text: String(g) }) : null);
       container.appendChild(b);

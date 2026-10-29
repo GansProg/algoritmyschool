@@ -25,7 +25,7 @@
 
   --font-display: 'Tektur', 'Golos Text', system-ui, sans-serif;
   --font-body: 'Golos Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-code: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  --font-code: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
   --font-hand: 'Caveat', 'Segoe Print', 'Comic Sans MS', cursive;
 
   --cell: 22px;
@@ -141,7 +141,7 @@ code, kbd { font-family: var(--font-code); font-size: .92em; }
   letter-spacing: .02em;
   margin-right: auto;
 }
-.brand span { color: var(--redpen); }
+.brand .dot { color: var(--redpen); }
 .topnav { display: flex; gap: 4px; flex-wrap: wrap; }
 .topnav a {
   padding: 6px 10px;
@@ -152,6 +152,26 @@ code, kbd { font-family: var(--font-code); font-size: .92em; }
 }
 .topnav a:hover { color: var(--graphite); background: var(--ink-soft); }
 .topnav a[aria-current="page"] { color: var(--graphite); background: var(--marker); color: var(--marker-ink); }
+/* переключатель языка ҚАЗ / РУС */
+.lang {
+  display: inline-flex;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  padding: 2px;
+}
+.lang button {
+  border: 0;
+  background: transparent;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: var(--graphite-soft);
+}
+.lang button:hover { color: var(--graphite); }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); }
 .theme-toggle {
   display: inline-flex; align-items: center; gap: 6px;
   border: 1.5px solid var(--line);
@@ -165,7 +185,7 @@ code, kbd { font-family: var(--font-code); font-size: .92em; }
 /* ---------- Главная ---------- */
 .home { padding-block: 24px 64px; overflow-x: clip; }
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; align-items: end; }
-.hero h1 { font-size: clamp(34px, 6vw, 68px); letter-spacing: -.01em; max-width: 12ch; }
+.hero h1 { font-size: clamp(32px, 6vw, 68px); letter-spacing: -.01em; max-width: 16ch; }
 .hero h1 .scrawl { position: relative; white-space: nowrap; }
 .hero h1 .scrawl svg { position: absolute; left: -2%; bottom: -.18em; width: 104%; height: .35em; overflow: visible; }
 .hero h1 .scrawl path { fill: none; stroke: var(--redpen); stroke-width: 3; stroke-linecap: round; }

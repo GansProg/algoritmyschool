@@ -44,7 +44,7 @@
     r.innerHTML = '';
     r.style.setProperty('--w', map.w);
     r.style.setProperty('--h', map.h);
-    r.setAttribute('aria-label', 'Поле ' + map.w + ' на ' + map.h + ' клеток');
+    r.setAttribute('aria-label', I18n.t('w.field', { w: map.w, h: map.h }));
     this.cells = {};
     for (var y = 0; y < map.h; y++) {
       for (var x = 0; x < map.w; x++) {

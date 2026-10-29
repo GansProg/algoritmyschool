@@ -1,4 +1,5 @@
 /* Клетчатый мир робота: карта, движение, датчики и запись шагов.
+   Сообщения — ключи перевода (w.bump и т. п.), текст подставляет интерфейс.
    Общий для «Робота-курьера» и «Баг-хантера». Работает и в браузере, и в node (для тестов). */
 (function (root) {
   'use strict';
@@ -56,7 +57,7 @@
 
   Robot.prototype.tick = function () {
     if (++this.ticks > this.maxTicks) {
-      throw new Stop('limit', 'Робот сделал слишком много шагов. Похоже, программа зациклилась.');
+      throw new Stop('limit', 'w.limit');
     }
   };
 
@@ -72,7 +73,7 @@
     var nx = this.x + DX[this.d], ny = this.y + DY[this.d];
     if (this.isWall(nx, ny)) {
       this.record('bump', { bx: nx, by: ny });
-      throw new Stop('bump', 'Робот врезался в стену. Посылка помялась!');
+      throw new Stop('bump', 'w.bump');
     }
     this.x = nx; this.y = ny; this.moves++;
     this.path.push({ x: nx, y: ny });
@@ -81,7 +82,7 @@
     this.record('move', picked ? { pick: key } : null);
     var t = this.map.target;
     if (t && t.x === nx && t.y === ny && this.parcelsLeft === 0) {
-      throw new Stop('done', 'Доставлено!');
+      throw new Stop('done', 'w.done');
     }
   };
 
@@ -114,9 +115,9 @@
     try {
       fn(r);
       if (r.parcelsLeft > 0 && r.map.parcels.length) {
-        outcome = { kind: 'end', message: 'Программа закончилась, но собраны не все посылки.' };
+        outcome = { kind: 'end', message: 'w.parcels' };
       } else {
-        outcome = { kind: 'end', message: 'Программа закончилась, а робот так и не дошёл до адресата.' };
+        outcome = { kind: 'end', message: 'w.target' };
       }
     } catch (e) {
       if (e instanceof Stop) outcome = { kind: e.kind, message: e.message };

@@ -14,57 +14,65 @@
   // Строка, начинающаяся с «~», разрешает менять отступ.
   var LEVELS = [
     {
-      id: 'b1', title: 'Не туда свернул', fixes: 1,
-      text: 'Робот должен проехать три клетки, повернуть к дому и доехать. Но он упирается в забор.',
+      id: 'b1', fixes: 1,
+      title: { kk: 'Басқа жаққа бұрылды', ru: 'Не туда свернул' },
+      text: { kk: 'Робот үш торкөз жүріп, үйге қарай бұрылып, жетуі керек. Бірақ ол дуалға тіреліп қалады.', ru: 'Робот должен проехать три клетки, повернуть к дому и доехать. Но он упирается в забор.' },
       map: ['S...', '###.', '###H'], start: { d: 1 },
       code: ['for i in range(3):', '    forward()', '{cmd:left()}', 'for i in range(2):', '    forward()'],
       fixed: ['for i in range(3):', '    forward()', 'right()', 'for i in range(2):', '    forward()']
     },
     {
-      id: 'b2', title: 'На шаг короче', fixes: 1,
-      text: 'Классическая ошибка «на единицу». Посчитай клетки до поворота.',
+      id: 'b2', fixes: 1,
+      title: { kk: 'Бір қадам қысқа', ru: 'На шаг короче' },
+      text: { kk: 'Классикалық «бірге қате». Бұрылысқа дейінгі торкөздерді сана.', ru: 'Классическая ошибка «на единицу». Посчитай клетки до поворота.' },
       map: ['S.....', '#####.', '#####.', '#####H'], start: { d: 1 },
       code: ['for i in range({n:4}):', '    forward()', 'right()', 'for i in range({n:3}):', '    forward()'],
       fixed: ['for i in range(5):', '    forward()', 'right()', 'for i in range(3):', '    forward()']
     },
     {
-      id: 'b3', title: 'Потерянный отступ', fixes: 1,
-      text: 'В Python отступ решает, какие команды повторяет цикл. Одна строка выпала из тела цикла. Стрелками у строки можно сдвинуть отступ.',
+      id: 'b3', fixes: 1,
+      title: { kk: 'Жоғалған шегініс', ru: 'Потерянный отступ' },
+      text: { kk: 'Python-да цикл қай командаларды қайталайтынын шегініс шешеді. Бір жол цикл денесінен түсіп қалған. Шегіністі жол жанындағы көрсеткілермен жылжытуға болады.', ru: 'В Python отступ решает, какие команды повторяет цикл. Одна строка выпала из тела цикла. Стрелками у строки можно сдвинуть отступ.' },
       map: ['S.##', '#..#', '##..', '###H'], start: { d: 1 },
       code: ['for step in range(3):', '    forward()', '    right()', '    forward()', '~left()'],
       fixed: ['for step in range(3):', '    forward()', '    right()', '    forward()', '    left()']
     },
     {
-      id: 'b4', title: 'Всё наоборот', fixes: 1,
-      text: 'Цикл while повторяет тело, пока условие истинно. Здесь первый цикл не сработал ни разу. Почему?',
+      id: 'b4', fixes: 1,
+      title: { kk: 'Бәрі керісінше', ru: 'Всё наоборот' },
+      text: { kk: 'while циклі шарт ақиқат болғанша денесін қайталайды. Мұнда бірінші цикл бір рет те орындалмады. Неге?', ru: 'Цикл while повторяет тело, пока условие истинно. Здесь первый цикл не сработал ни разу. Почему?' },
       map: ['S....', '####.', '####.', '####H'], start: { d: 1 },
       code: ['while {cond:wall_ahead()}:', '    forward()', 'right()', 'while not wall_ahead():', '    forward()'],
       fixed: ['while not wall_ahead():', '    forward()', 'right()', 'while not wall_ahead():', '    forward()']
     },
     {
-      id: 'b5', title: 'If или while?', fixes: 1,
-      text: 'if проверяет условие один раз, while повторяет, пока условие верно. Робот проехал всего две клетки.',
+      id: 'b5', fixes: 1,
+      title: { kk: 'If пе, while ма?', ru: 'If или while?' },
+      text: { kk: 'if шартты бір рет тексереді, while шарт дұрыс болғанша қайталайды. Робот небәрі екі торкөз жүрді.', ru: 'if проверяет условие один раз, while повторяет, пока условие верно. Робот проехал всего две клетки.' },
       map: ['####H', '####.', 'S....'], start: { d: 1 },
       code: ['forward()', '{kw:if} not wall_ahead():', '    forward()', 'left()', 'while not at_target():', '    forward()'],
       fixed: ['forward()', 'while not wall_ahead():', '    forward()', 'left()', 'while not at_target():', '    forward()']
     },
     {
-      id: 'b6', title: 'Робот кружится', fixes: 2,
-      text: 'Здесь две ошибки. Робот крутится на месте, потому что смотрит не тем датчиком. А когда начнёт ехать, ему не хватит повторов.',
+      id: 'b6', fixes: 2,
+      title: { kk: 'Робот айналып жүр', ru: 'Робот кружится' },
+      text: { kk: 'Мұнда екі қате бар. Робот бір орнында айналады, себебі басқа датчикке қарайды. Ал жүре бастағанда, оған қайталау саны жетпейді.', ru: 'Здесь две ошибки. Робот крутится на месте, потому что смотрит не тем датчиком. А когда начнёт ехать, ему не хватит повторов.' },
       map: ['S...', '###.', 'H...'], start: { d: 1 },
       code: ['for i in range({n:6}):', '    if {cond:wall_right()}:', '        right()', '    else:', '        forward()'],
       fixed: ['for i in range(10):', '    if wall_ahead():', '        right()', '    else:', '        forward()']
     },
     {
-      id: 'b7', title: 'Квадрат', fixes: 2,
-      text: 'Нужно объехать квартал, собрать три посылки и вернуться на склад. Вложенный цикл написан почти верно.',
+      id: 'b7', fixes: 2,
+      title: { kk: 'Шаршы', ru: 'Квадрат' },
+      text: { kk: 'Кварталды айналып, үш сәлемдеме жинап, қоймаға оралу керек. Кірістірілген цикл дерлік дұрыс жазылған.', ru: 'Нужно объехать квартал, собрать три посылки и вернуться на склад. Вложенный цикл написан почти верно.' },
       map: ['H..p', '.##.', '.##.', 'p..p'], start: { x: 0, y: 0, d: 1 },
       code: ['for side in range(4):', '    for step in range({n:2}):', '        forward()', '    {cmd:left()}'],
       fixed: ['for side in range(4):', '    for step in range(3):', '        forward()', '    right()']
     },
     {
-      id: 'b8', title: 'Правая рука', fixes: 1,
-      text: 'Алгоритм обхода лабиринта по правой стене. В одной ветке перепутано условие, и робот бьётся лбом.',
+      id: 'b8', fixes: 1,
+      title: { kk: 'Оң қол', ru: 'Правая рука' },
+      text: { kk: 'Лабиринтті оң қабырға бойымен айналып өту алгоритмі. Бір тармақта шарт шатасқан, сондықтан робот маңдайымен соғылады.', ru: 'Алгоритм обхода лабиринта по правой стене. В одной ветке перепутано условие, и робот бьётся лбом.' },
       map: ['S..#...', '#.##.#.', '#....#.', '##.###.', '.......', '.#.##.#', '.#..#.H'], start: { d: 1 },
       code: ['while not at_target():', '    if not wall_right():', '        right()', '        forward()',
         '    elif {cond:wall_ahead()}:', '        forward()', '    else:', '        left()'],
@@ -101,13 +109,14 @@
     });
   }
 
-  function SyntaxErr(line, msg) { this.line = line; this.message = msg; }
+  // Сообщение — ключ перевода, arg подставляется в {x}
+  function SyntaxErr(line, key, arg) { this.line = line; this.message = key; this.arg = arg; }
 
   var COND_RE = /^(not )?(wall_ahead|wall_right|wall_left|at_target)\(\)$/;
 
   function parseCond(s, ln) {
     var m = COND_RE.exec(s.trim());
-    if (!m) throw new SyntaxErr(ln, 'Непонятное условие: ' + s.trim());
+    if (!m) throw new SyntaxErr(ln, 'b.e.cond', s.trim());
     return { not: !!m[1], fn: m[2] };
   }
 
@@ -117,7 +126,7 @@
     text.forEach(function (raw, i) {
       if (!raw.trim() || raw.trim()[0] === '#') return;
       var sp = /^( *)/.exec(raw)[1].length;
-      if (sp % 4) throw new SyntaxErr(i, 'Отступ должен быть кратен 4 пробелам.');
+      if (sp % 4) throw new SyntaxErr(i, 'b.e.indent4');
       stmts.push({ line: i, depth: sp / 4, src: raw.trim() });
     });
     var pos = 0;
@@ -127,7 +136,7 @@
       while (pos < stmts.length) {
         var s = stmts[pos];
         if (s.depth < depth) break;
-        if (s.depth > depth) throw new SyntaxErr(s.line, 'Лишний отступ: эта строка не внутри цикла или условия.');
+        if (s.depth > depth) throw new SyntaxErr(s.line, 'b.e.extra');
         pos++;
         var m, node;
         if ((m = /^(forward|left|right)\(\)$/.exec(s.src))) {
@@ -150,11 +159,11 @@
             } else break;
           }
         } else if (/^(elif .*|else):$/.test(s.src)) {
-          throw new SyntaxErr(s.line, '«' + s.src.split(' ')[0].replace(':', '') + '» без «if» перед ним.');
+          throw new SyntaxErr(s.line, 'b.e.noIf', s.src.split(' ')[0].replace(':', ''));
         } else if (s.src === 'pass') {
           node = { kind: 'pass', line: s.line };
         } else {
-          throw new SyntaxErr(s.line, 'Непонятная команда: ' + s.src);
+          throw new SyntaxErr(s.line, 'b.e.unknown', s.src);
         }
         out.push(node);
       }
@@ -163,13 +172,13 @@
 
     function body(head) {
       if (pos >= stmts.length || stmts[pos].depth <= head.depth) {
-        throw new SyntaxErr(head.line, 'После двоеточия нужен блок с отступом.');
+        throw new SyntaxErr(head.line, 'b.e.block');
       }
       return block(head.depth + 1);
     }
 
     var prog = block(0);
-    if (pos < stmts.length) throw new SyntaxErr(stmts[pos].line, 'Неожиданный отступ.');
+    if (pos < stmts.length) throw new SyntaxErr(stmts[pos].line, 'b.e.unexpected');
     return prog;
   }
 
@@ -208,7 +217,7 @@
   function run(level, text) {
     var prog;
     try { prog = parse(text); } catch (e) {
-      if (e instanceof SyntaxErr) return { kind: 'syntax', line: e.line, message: e.message, frames: [], path: [] };
+      if (e instanceof SyntaxErr) return { kind: 'syntax', line: e.line, message: e.message, arg: e.arg, frames: [], path: [] };
       throw e;
     }
     return World.simulate(level, function (r) { r.vars = {}; exec(r, prog, r.vars); }, { maxTicks: 800 });
